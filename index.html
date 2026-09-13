@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مغامرة العائلة 🎲</title>
+<style>
+:root{
+  --bg:#f6f3ec;
+  --card:#ffffff;
+  --text:#2a2a2a;
+  --muted:#6f6f6f;
+  --border:#ddd7ca;
+  --accent:#7c5cff;
+  --accent2:#efeaff;
+  --success:#e8f7ed;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+  background:linear-gradient(180deg,#fffaf0 0%,#f5f2ec 100%);
+  color:var(--text);
+}
+.container{
+  width:min(920px,calc(100% - 24px));
+  margin:24px auto 40px;
+}
+.hero{
+  text-align:center;
+  margin-bottom:18px;
+}
+.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,44px)}
+.hero p{margin:0;color:var(--muted)}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.05);
+}
+.form-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:end;
+}
+label{font-size:14px;color:var(--muted);flex:1;min-width:180px}
+input{
+  width:100%;
+  margin-top:6px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  font-size:16px;
+  background:#fff;
+}
+button{
+  min-height:46px;
+  border:0;
+  border-radius:14px;
+  padding:11px 17px;
+  font-size:16px;
+  cursor:pointer;
+}
+button.primary{
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+}
+button.secondary{
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+button:disabled{opacity:.45;cursor:not-allowed}
+.players{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.player-chip{
+  padding:9px 12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:#fafafa;
+}
+.player-chip.active{
+  background:var(--accent2);
+  border-color:#b9aaff;
+  font-weight:700;
+}
+.center{text-align:center}
+.turn-label{font-size:14px;color:var(--muted)}
+.turn-name{font-size:22px;font-weight:800;margin-top:4px}
+.die{
+  width:92px;
+  height:92px;
+  margin:16px auto;
+  border:2px solid var(--border);
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  font-size:58px;
+  background:#fff;
+}
+.result{
+  min-height:100px;
+  margin-top:16px;
+  border-radius:16px;
+  background:#faf8f3;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1.8;
+}
+.action-row{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.rules{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.rule{
+  background:#fafafa;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  text-align:center;
+}
+.note{
+  margin-top:12px;
+  color:var(--muted);
+  line-height:1.7;
+}
+@media(max-width:650px){
+  .rules{grid-template-columns:repeat(2,1fr)}
+  .container{margin-top:14px}
+  .card{padding:14px}
+}
+</style>
+</head>
+<body>
+<main class="container">
+  <header class="hero">
+    <h1>🎲 مغامرة العائلة</h1>
+    <p>لعبة منزلية بالنرد للكبار والصغار — أول من يصل إلى 7 نقاط يفوز.</p>
+  </header>
+
+  <section class="card">
+    <div class="form-row">
+      <label>اسم اللاعب
+        <input id="nameInput" maxlength="14" placeholder="مثلاً: عمر">
+      </label>
+      <button id="addBtn" class="primary">+ أضف لاعباً</button>
+    </div>
+    <div id="players" class="players"></div>
+  </section>
+
+  <section class="card center">
+    <div class="turn-label">الدور الآن</div>
+    <div id="turnName" class="turn-name">أضيفوا لاعبين للبدء</div>
+    <div id="die" class="die">🎲</div>
+    <div class="action-row">
+      <button id="rollBtn" class="primary" disabled>ارمِ النرد 🎲</button>
+      <button id="resetBtn" class="secondary">إعادة اللعبة</button>
+    </div>
+    <div id="result" class="result">كل رقم سيعطيكم مفاجأة مختلفة 😄</div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0">معنى أرقام النرد</h2>
+    <div class="rules">
+      <div class="rule">1️⃣ سؤال مضحك</div>
+      <div class="rule">2️⃣ تحدٍ سريع</div>
+      <div class="rule">3️⃣ تمثيل بدون كلام</div>
+      <div class="rule">4️⃣ تحدي العائلة</div>
+      <div class="rule">5️⃣ بطاقة حظ 🍀</div>
+      <div class="rule">6️⃣ سؤال ذكي 🧠</div>
+    </div>
+    <div class="note">⭐ إذا نجحت في المهمة تحصل على نقطة. أول لاعب يصل إلى 7 نقاط يفوز.</div>
+  </section>
+</main>
+
+<script>
+const players = [];
+const scores = [];
+let turn = 0;
+
+const nameInput = document.getElementById('nameInput');
+const addBtn = document.getElementById('addBtn');
+const playersEl = document.getElementById('players');
+const turnName = document.getElementById('turnName');
+const dieEl = document.getElementById('die');
+const rollBtn = document.getElementById('rollBtn');
+const resetBtn = document.getElementById('resetBtn');
+const resultEl = document.getElementById('result');
+
+const faces = ['', '⚀','⚁','⚂','⚃','⚄','⚅'];
+
+const tasks = {
+  1: [
+    'ما أغرب أكلة يمكن أن تخترعها؟',
+    'لو أصبحت حيواناً ليوم واحد، ماذا تختار ولماذا؟',
+    'قل شيئاً مضحكاً حدث لك من قبل.',
+    'لو كان لك اسم جديد تماماً، ماذا تختار؟',
+    'من في العائلة تتوقع أن ينام أولاً في رحلة طويلة؟'
+  ],
+  2: [
+    'قف على قدم واحدة وعدّ إلى 10.',
+    'قل أسماء 5 حيوانات خلال 7 ثوانٍ.',
+    'امشِ مثل البطّة لمدة 10 ثوانٍ.',
+    'حاول أن تلمس أنفك ولسانك خارج فمك في الوقت نفسه 😄',
+    'قل جملة كاملة دون أن تظهر أسنانك.'
+  ],
+  3: [
+    'مثّل قطة غاضبة دون كلام.',
+    'مثّل شخصاً يقود سيارة سريعة دون كلام.',
+    'مثّل أنك طائرة تستعد للهبوط.',
+    'مثّل قرداً يبحث عن موزة.',
+    'مثّل شخصاً استيقظ متأخراً جداً.'
+  ],
+  4: [
+    'اختر لاعباً: أول من يضحك خلال 20 ثانية يخسر التحدي.',
+    'اختر لاعباً وتنافسا: من يقول 6 أسماء فواكه أسرع؟',
+    'الجميع يقلّد حركة تقوم بها؛ آخر شخص يقلدك يخسر.',
+    'اختر شخصاً: تحدّيا بعضكما في حجر–ورق–مقص، الأفضل من 3.',
+    'الجميع يقول اسم بلد بالتتابع؛ أول من يتوقف 5 ثوانٍ يخسر.'
+  ],
+  5: [
+    '🍀 حظ سعيد! تحصل على نقطة مجانية.',
+    '🎁 اختر لاعباً وامنحه نقطة، وتحصل أنت أيضاً على نقطة.',
+    '👑 أنت الملك لهذه الجولة: اختر شخصاً يؤدي تحدياً بدلاً منك.',
+    '🚀 نقطة مضاعفة! إذا نجحت في تحدٍ تختاره العائلة تحصل على نقطتين.',
+    '😈 سرقة لطيفة: اختر لاعباً لديه نقطة واحدة على الأقل وانقل نقطة واحدة إليك.'
+  ],
+  6: [
+    'اذكر 3 كواكب غير الأرض.',
+    'ما الحيوان الذي يُعرف بأنه أسرع حيوان بري؟',
+    'كم يساوي 7 × 8؟',
+    'اذكر 4 دول تبدأ أسماؤها بحروف مختلفة.',
+    'لديك 10 ثوانٍ: اذكر 5 أشياء يمكن أن تجدها في المطبخ.'
+  ]
+};
+
+function renderPlayers(){
+  playersEl.innerHTML = players.map((p,i) =>
+    `<span class="player-chip ${i===turn?'active':''}">${p}: ⭐ ${scores[i]}</span>`
+  ).join('');
+  turnName.textContent = players.length >= 2 ? players[turn] : 'أضيفوا لاعبين للبدء';
+  rollBtn.disabled = players.length < 2;
+}
+
+function addPlayer(){
+  const name = nameInput.value.trim();
+  if(!name || players.length >= 6) return;
+  players.push(name);
+  scores.push(0);
+  nameInput.value = '';
+  renderPlayers();
+}
+
+function finishTurn(success, points=1){
+  if(success) scores[turn] += points;
+  if(scores[turn] >= 7){
+    resultEl.innerHTML = `🏆🎉 <strong>${players[turn]}</strong> فاز بمغامرة العائلة!`;
+    renderPlayers();
+    rollBtn.disabled = true;
+    return;
+  }
+  turn = (turn + 1) % players.length;
+  renderPlayers();
+  resultEl.textContent = `الدور التالي: ${players[turn]} 🎲`;
+  rollBtn.disabled = false;
+}
+
+addBtn.addEventListener('click', addPlayer);
+nameInput.addEventListener('keydown', e => { if(e.key === 'Enter') addPlayer(); });
+
+rollBtn.addEventListener('click', () => {
+  const n = Math.floor(Math.random()*6)+1;
+  dieEl.textContent = faces[n];
+  const arr = tasks[n];
+  const task = arr[Math.floor(Math.random()*arr.length)];
+
+  resultEl.innerHTML = `
+    <div>
+      <div style="color:#6f6f6f;font-size:14px;margin-bottom:6px">${players[turn]} رمى ${n}</div>
+      <div>${task}</div>
+      <div class="action-row">
+        <button id="successBtn" class="primary">✅ نجحت</button>
+        <button id="failBtn" class="secondary">❌ لم أنجح</button>
+      </div>
+    </div>`;
+  rollBtn.disabled = true;
+
+  document.getElementById('successBtn').addEventListener('click', () => finishTurn(true));
+  document.getElementById('failBtn').addEventListener('click', () => finishTurn(false));
+});
+
+resetBtn.addEventListener('click', () => {
+  players.length = 0;
+  scores.length = 0;
+  turn = 0;
+  dieEl.textContent = '🎲';
+  resultEl.textContent = 'كل رقم سيعطيكم مفاجأة مختلفة 😄';
+  renderPlayers();
+});
+
+renderPlayers();
+</script>
+</body>
+</html>
