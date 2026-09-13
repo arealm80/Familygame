@@ -3,319 +3,788 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مغامرة العائلة 🎲</title>
+<meta name="theme-color" content="#7C66FF">
+<title>مغامرة الأطفال 🎲</title>
 <style>
 :root{
-  --bg:#f6f3ec;
-  --card:#ffffff;
-  --text:#2a2a2a;
-  --muted:#6f6f6f;
-  --border:#ddd7ca;
-  --accent:#7c5cff;
-  --accent2:#efeaff;
-  --success:#e8f7ed;
+  --ink:#23304A;
+  --muted:#6D7790;
+  --purple:#7C66FF;
+  --purple2:#9A86FF;
+  --yellow:#FFD96A;
+  --pink:#FF91B8;
+  --blue:#8CDFFF;
+  --green:#91E5B8;
+  --orange:#FFB76F;
+  --red:#FF7B7B;
+  --white:#FFFFFF;
+  --paper:#FFFDF8;
+  --line:#E9E5F2;
+  --shadow:0 14px 34px rgba(64,53,118,.13);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
-  background:linear-gradient(180deg,#fffaf0 0%,#f5f2ec 100%);
-  color:var(--text);
+  color:var(--ink);
+  font-family:"Trebuchet MS","Segoe UI",Tahoma,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 8% 7%,rgba(255,217,106,.45) 0 90px,transparent 91px),
+    radial-gradient(circle at 92% 10%,rgba(140,223,255,.35) 0 120px,transparent 121px),
+    radial-gradient(circle at 5% 84%,rgba(255,145,184,.22) 0 110px,transparent 111px),
+    linear-gradient(180deg,#FFF9EE 0%,#F7F4FF 55%,#FFFDF8 100%);
+  min-height:100vh;
 }
-.container{
-  width:min(920px,calc(100% - 24px));
-  margin:24px auto 40px;
+button,input{font:inherit}
+button{touch-action:manipulation}
+
+.wrap{
+  width:min(980px,calc(100% - 22px));
+  margin:auto;
+  padding:18px 0 44px;
 }
+
 .hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:34px;
+  padding:30px 18px 28px;
   text-align:center;
-  margin-bottom:18px;
-}
-.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,44px)}
-.hero p{margin:0;color:var(--muted)}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:18px;
-  margin-bottom:14px;
-  box-shadow:0 8px 30px rgba(0,0,0,.05);
-}
-.form-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:end;
-}
-label{font-size:14px;color:var(--muted);flex:1;min-width:180px}
-input{
-  width:100%;
-  margin-top:6px;
-  padding:14px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  font-size:16px;
-  background:#fff;
-}
-button{
-  min-height:46px;
-  border:0;
-  border-radius:14px;
-  padding:11px 17px;
-  font-size:16px;
-  cursor:pointer;
-}
-button.primary{
-  background:var(--accent);
   color:#fff;
-  font-weight:700;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  box-shadow:var(--shadow);
 }
-button.secondary{
-  background:#fff;
-  color:var(--text);
-  border:1px solid var(--border);
+.hero:before,.hero:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
 }
-button:disabled{opacity:.45;cursor:not-allowed}
-.players{
+.hero:before{width:190px;height:190px;left:-70px;top:-85px}
+.hero:after{width:150px;height:150px;right:-52px;bottom:-60px}
+
+.hero-content{position:relative;z-index:2}
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.25);
+  font-size:13px;
+  font-weight:900;
+}
+.hero h1{
+  margin:12px 0 6px;
+  font-size:clamp(34px,7vw,58px);
+  line-height:1.04;
+}
+.hero p{
+  margin:0 auto;
+  max-width:620px;
+  line-height:1.75;
+  color:rgba(255,255,255,.93);
+  font-size:clamp(15px,2.7vw,18px);
+}
+.pills{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-  margin-top:12px;
+  justify-content:center;
+  margin-top:16px;
 }
-.player-chip{
-  padding:9px 12px;
-  border:1px solid var(--border);
+.pill{
+  background:#fff;
+  color:#5D4AD0;
+  font-size:13px;
+  font-weight:900;
+  padding:8px 12px;
   border-radius:999px;
-  background:#fafafa;
 }
-.player-chip.active{
-  background:var(--accent2);
-  border-color:#b9aaff;
-  font-weight:700;
-}
-.center{text-align:center}
-.turn-label{font-size:14px;color:var(--muted)}
-.turn-name{font-size:22px;font-weight:800;margin-top:4px}
-.die{
-  width:92px;
-  height:92px;
-  margin:16px auto;
-  border:2px solid var(--border);
-  border-radius:22px;
+
+.sticker{
+  position:absolute;
+  z-index:1;
   display:grid;
   place-items:center;
-  font-size:58px;
+  width:60px;
+  height:60px;
+  border-radius:22px;
+  border:4px solid #fff;
+  box-shadow:0 8px 16px rgba(37,28,84,.16);
+  font-size:31px;
+  transform:rotate(-7deg);
+  animation:floaty 4s ease-in-out infinite;
+}
+.s1{left:5%;top:22px;background:var(--yellow)}
+.s2{right:6%;top:24px;background:var(--blue);transform:rotate(8deg);animation-delay:.9s}
+.s3{left:10%;bottom:18px;background:var(--pink);transform:rotate(7deg);animation-delay:1.6s}
+.s4{right:11%;bottom:16px;background:var(--green);transform:rotate(-9deg);animation-delay:2.1s}
+@keyframes floaty{50%{translate:0 -7px}}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:16px;
+  margin-top:16px;
+}
+.card{
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.card h2{
+  margin:0 0 12px;
+  font-size:20px;
+}
+.setup{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.input{
+  flex:1;
+  min-width:180px;
+  border:2px solid var(--line);
+  border-radius:16px;
+  padding:13px 14px;
+  font-size:16px;
+  color:var(--ink);
+  outline:none;
+  transition:.2s;
   background:#fff;
 }
-.result{
-  min-height:100px;
-  margin-top:16px;
+.input:focus{
+  border-color:#A999FF;
+  box-shadow:0 0 0 4px rgba(124,102,255,.11);
+}
+.btn{
+  min-height:48px;
+  border:0;
   border-radius:16px;
-  background:#faf8f3;
-  padding:16px;
+  padding:11px 17px;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  transition:transform .13s ease, box-shadow .13s ease, opacity .13s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn:focus-visible{outline:4px solid rgba(124,102,255,.2);outline-offset:2px}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none}
+.primary{
+  color:#fff;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  box-shadow:0 8px 18px rgba(124,102,255,.25);
+}
+.soft{
+  color:#604DD3;
+  background:#F0EDFF;
+  border:1px solid #DCD4FF;
+}
+.good{
+  background:#DDF7E8;
+  color:#187344;
+  border:1px solid #AFE7C6;
+}
+.bad{
+  background:#FFF0F4;
+  color:#B14464;
+  border:1px solid #FFD0DC;
+}
+.players{
+  margin-top:13px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.player{
+  padding:9px 12px;
+  border-radius:999px;
+  background:#F8F7FC;
+  border:1px solid var(--line);
+  font-weight:800;
+}
+.player.active{
+  background:#EEE9FF;
+  border-color:#BAADFF;
+  color:#5C49CD;
+}
+
+.play{
+  text-align:center;
+  min-height:100%;
+}
+.turn-small{font-size:13px;color:var(--muted);font-weight:800}
+.turn{
+  font-size:25px;
+  font-weight:1000;
+  margin-top:3px;
+}
+.dice-stage{
+  position:relative;
+  width:126px;
+  height:126px;
+  margin:14px auto;
+}
+.dice-shadow{
+  position:absolute;
+  width:88px;
+  height:20px;
+  background:rgba(52,44,95,.13);
+  filter:blur(6px);
+  border-radius:50%;
+  left:19px;
+  bottom:2px;
+}
+.die{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:104px;
+  height:104px;
+  display:grid;
+  place-items:center;
+  border-radius:28px;
+  background:#fff;
+  border:3px solid #EEE9FF;
+  font-size:65px;
+  box-shadow:0 12px 24px rgba(67,55,127,.14);
+}
+.die.rolling{animation:roll .55s ease}
+@keyframes roll{
+  0%{transform:rotate(0) scale(1)}
+  35%{transform:rotate(-12deg) scale(1.08)}
+  70%{transform:rotate(12deg) scale(.97)}
+  100%{transform:rotate(0) scale(1)}
+}
+.actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+}
+
+.task{
+  margin-top:14px;
+  min-height:140px;
   display:flex;
   align-items:center;
   justify-content:center;
-  line-height:1.8;
+  border-radius:22px;
+  padding:18px;
+  background:linear-gradient(180deg,#FFFDF9,#FAF8FF);
+  border:2px dashed #DDD6F4;
 }
-.action-row{
+.task-inner{width:100%}
+.task-icon{
+  display:block;
+  font-size:42px;
+  margin-bottom:7px;
+}
+.task-text{
+  font-size:19px;
+  font-weight:900;
+  line-height:1.7;
+}
+.task-type{
+  display:inline-block;
+  margin-bottom:8px;
+  color:#705EDD;
+  background:#EFEAFF;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.score-title{
   display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:12px;
+  align-items:center;
+  gap:8px;
 }
+.goal{
+  padding:13px;
+  border-radius:18px;
+  background:#FFF8DA;
+  border:1px solid #F6E5A0;
+  margin-bottom:13px;
+  font-weight:900;
+  line-height:1.6;
+}
+.progress-list{display:grid;gap:10px}
+.progress-row{
+  display:grid;
+  grid-template-columns:minmax(70px,120px) 1fr 42px;
+  gap:8px;
+  align-items:center;
+}
+.pname{font-size:14px;font-weight:900;overflow:hidden;text-overflow:ellipsis}
+.track{
+  height:14px;
+  background:#F0EDF6;
+  border-radius:999px;
+  overflow:hidden;
+}
+.bar{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--pink),var(--purple));
+  transition:width .35s ease;
+}
+.score-badge{
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+}
+
 .rules{
+  margin-top:16px;
+}
+.rule-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
 .rule{
-  background:#fafafa;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:12px;
+  min-height:104px;
+  padding:12px 8px;
+  border-radius:20px;
   text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  font-weight:900;
+  border:1px solid rgba(0,0,0,.04);
 }
-.note{
+.rule b{font-size:28px}
+.r1{background:#FFF1C8}
+.r2{background:#E6F8EC}
+.r3{background:#E4F5FF}
+.r4{background:#FFE4EE}
+.r5{background:#F0E9FF}
+.r6{background:#FFEBD8}
+
+.tip{
   margin-top:12px;
   color:var(--muted);
-  line-height:1.7;
+  font-size:14px;
+  line-height:1.65;
 }
-@media(max-width:650px){
-  .rules{grid-template-columns:repeat(2,1fr)}
-  .container{margin-top:14px}
-  .card{padding:14px}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%) translateY(20px);
+  background:#24304A;
+  color:#fff;
+  padding:11px 16px;
+  border-radius:999px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:.22s;
+  z-index:50;
+  max-width:calc(100% - 30px);
+  text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:40;
+}
+.confetti span{
+  position:absolute;
+  top:-30px;
+  font-size:24px;
+  animation:fall 1.9s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(540deg)}
+}
+
+@media(max-width:760px){
+  .grid{grid-template-columns:1fr}
+  .hero{padding-top:74px}
+  .sticker{width:52px;height:52px;font-size:27px}
+}
+@media(max-width:560px){
+  .wrap{width:min(100% - 14px,980px);padding-top:8px}
+  .hero{border-radius:26px}
+  .card{border-radius:22px;padding:14px}
+  .rule-grid{grid-template-columns:repeat(2,1fr)}
+  .task-text{font-size:18px}
+  .btn{width:100%}
+  .setup .btn{width:auto}
+  .actions .btn{width:auto;flex:1}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
 <body>
-<main class="container">
+
+<div class="wrap">
+
   <header class="hero">
-    <h1>🎲 مغامرة العائلة</h1>
-    <p>لعبة منزلية بالنرد للكبار والصغار — أول من يصل إلى 7 نقاط يفوز.</p>
+    <div class="sticker s1">🌟</div>
+    <div class="sticker s2">🦄</div>
+    <div class="sticker s3">🌈</div>
+    <div class="sticker s4">🎲</div>
+
+    <div class="hero-content">
+      <div class="kicker">🎉 لعبة عائلية للأطفال</div>
+      <h1>مغامرة الأطفال</h1>
+      <p>ارمِ النرد، نفّذ مهمة مضحكة، واجمع النجوم. أول لاعب يصل إلى 6 نجوم يفوز بالكأس! 🏆</p>
+
+      <div class="pills">
+        <span class="pill">👧 سهلة للأطفال</span>
+        <span class="pill">👨‍👩‍👧‍👦 2–6 لاعبين</span>
+        <span class="pill">⏱️ 10–20 دقيقة</span>
+      </div>
+    </div>
   </header>
 
-  <section class="card">
-    <div class="form-row">
-      <label>اسم اللاعب
-        <input id="nameInput" maxlength="14" placeholder="مثلاً: عمر">
-      </label>
-      <button id="addBtn" class="primary">+ أضف لاعباً</button>
-    </div>
-    <div id="players" class="players"></div>
-  </section>
+  <div class="grid">
 
-  <section class="card center">
-    <div class="turn-label">الدور الآن</div>
-    <div id="turnName" class="turn-name">أضيفوا لاعبين للبدء</div>
-    <div id="die" class="die">🎲</div>
-    <div class="action-row">
-      <button id="rollBtn" class="primary" disabled>ارمِ النرد 🎲</button>
-      <button id="resetBtn" class="secondary">إعادة اللعبة</button>
-    </div>
-    <div id="result" class="result">كل رقم سيعطيكم مفاجأة مختلفة 😄</div>
-  </section>
+    <section class="card">
+      <h2>👋 من سيلعب؟</h2>
+      <div class="setup">
+        <input id="nameInput" class="input" maxlength="14" placeholder="اكتب اسم اللاعب">
+        <button id="addBtn" class="btn primary" type="button">➕ إضافة</button>
+      </div>
+      <div id="players" class="players" aria-live="polite"></div>
+      <div class="tip">أضف لاعبين على الأقل، وبحد أقصى 6 لاعبين.</div>
+    </section>
 
-  <section class="card">
-    <h2 style="margin-top:0">معنى أرقام النرد</h2>
-    <div class="rules">
-      <div class="rule">1️⃣ سؤال مضحك</div>
-      <div class="rule">2️⃣ تحدٍ سريع</div>
-      <div class="rule">3️⃣ تمثيل بدون كلام</div>
-      <div class="rule">4️⃣ تحدي العائلة</div>
-      <div class="rule">5️⃣ بطاقة حظ 🍀</div>
-      <div class="rule">6️⃣ سؤال ذكي 🧠</div>
+    <section class="card">
+      <h2 class="score-title">⭐ لوحة النجوم</h2>
+      <div class="goal">🎯 الهدف: اجمع <strong>6 نجوم</strong> قبل الجميع.</div>
+      <div id="scoreBoard" class="progress-list">
+        <div class="tip">ستظهر نقاط اللاعبين هنا بعد إضافتهم.</div>
+      </div>
+    </section>
+
+    <section class="card play">
+      <div class="turn-small">الدور الآن</div>
+      <div id="turnName" class="turn">أضيفوا اللاعبين أولاً</div>
+
+      <div class="dice-stage">
+        <div class="dice-shadow"></div>
+        <div id="die" class="die" aria-live="polite">🎲</div>
+      </div>
+
+      <div class="actions">
+        <button id="rollBtn" class="btn primary" type="button" disabled>🎲 ارمِ النرد</button>
+        <button id="resetBtn" class="btn soft" type="button">🔄 لعبة جديدة</button>
+      </div>
+
+      <div id="task" class="task" aria-live="polite">
+        <div class="task-inner">
+          <span class="task-icon">🌈</span>
+          <div class="task-text">جاهزون للمرح؟</div>
+          <div class="tip">أضيفوا اللاعبين ثم ارموا النرد.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🎯 ماذا يعني رقم النرد؟</h2>
+      <div class="rule-grid">
+        <div class="rule r1"><b>1️⃣</b><span>حركة مضحكة</span></div>
+        <div class="rule r2"><b>2️⃣</b><span>حيوان مرح</span></div>
+        <div class="rule r3"><b>3️⃣</b><span>تحدي سرعة</span></div>
+        <div class="rule r4"><b>4️⃣</b><span>تمثيل</span></div>
+        <div class="rule r5"><b>5️⃣</b><span>بطاقة حظ</span></div>
+        <div class="rule r6"><b>6️⃣</b><span>سؤال ذكي</span></div>
+      </div>
+      <div class="tip">إذا نفذت المهمة بنجاح تحصل على ⭐. إذا لم تنجح ينتقل الدور للاعب التالي.</div>
+    </section>
+
+  </div>
+
+  <section class="card rules">
+    <h2>💡 قوانين بسيطة</h2>
+    <div class="tip" style="font-size:15px;color:var(--ink)">
+      لا يوجد خروج من اللعبة، ولا عقوبات مزعجة. الهدف هو الضحك والحركة واللعب معاً.
+      يستطيع أحد الوالدين مساعدة الطفل الأصغر في قراءة المهمة.
     </div>
-    <div class="note">⭐ إذا نجحت في المهمة تحصل على نقطة. أول لاعب يصل إلى 7 نقاط يفوز.</div>
   </section>
-</main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="confetti" class="confetti" aria-hidden="true"></div>
 
 <script>
-const players = [];
-const scores = [];
-let turn = 0;
+(() => {
+  const players = [];
+  const scores = [];
+  let turn = 0;
+  let gameOver = false;
 
-const nameInput = document.getElementById('nameInput');
-const addBtn = document.getElementById('addBtn');
-const playersEl = document.getElementById('players');
-const turnName = document.getElementById('turnName');
-const dieEl = document.getElementById('die');
-const rollBtn = document.getElementById('rollBtn');
-const resetBtn = document.getElementById('resetBtn');
-const resultEl = document.getElementById('result');
+  const $ = id => document.getElementById(id);
+  const nameInput = $('nameInput');
+  const addBtn = $('addBtn');
+  const playersEl = $('players');
+  const scoreBoard = $('scoreBoard');
+  const turnName = $('turnName');
+  const die = $('die');
+  const rollBtn = $('rollBtn');
+  const resetBtn = $('resetBtn');
+  const task = $('task');
+  const toast = $('toast');
+  const confetti = $('confetti');
 
-const faces = ['', '⚀','⚁','⚂','⚃','⚄','⚅'];
+  const faces = ['', '⚀','⚁','⚂','⚃','⚄','⚅'];
 
-const tasks = {
-  1: [
-    'ما أغرب أكلة يمكن أن تخترعها؟',
-    'لو أصبحت حيواناً ليوم واحد، ماذا تختار ولماذا؟',
-    'قل شيئاً مضحكاً حدث لك من قبل.',
-    'لو كان لك اسم جديد تماماً، ماذا تختار؟',
-    'من في العائلة تتوقع أن ينام أولاً في رحلة طويلة؟'
-  ],
-  2: [
-    'قف على قدم واحدة وعدّ إلى 10.',
-    'قل أسماء 5 حيوانات خلال 7 ثوانٍ.',
-    'امشِ مثل البطّة لمدة 10 ثوانٍ.',
-    'حاول أن تلمس أنفك ولسانك خارج فمك في الوقت نفسه 😄',
-    'قل جملة كاملة دون أن تظهر أسنانك.'
-  ],
-  3: [
-    'مثّل قطة غاضبة دون كلام.',
-    'مثّل شخصاً يقود سيارة سريعة دون كلام.',
-    'مثّل أنك طائرة تستعد للهبوط.',
-    'مثّل قرداً يبحث عن موزة.',
-    'مثّل شخصاً استيقظ متأخراً جداً.'
-  ],
-  4: [
-    'اختر لاعباً: أول من يضحك خلال 20 ثانية يخسر التحدي.',
-    'اختر لاعباً وتنافسا: من يقول 6 أسماء فواكه أسرع؟',
-    'الجميع يقلّد حركة تقوم بها؛ آخر شخص يقلدك يخسر.',
-    'اختر شخصاً: تحدّيا بعضكما في حجر–ورق–مقص، الأفضل من 3.',
-    'الجميع يقول اسم بلد بالتتابع؛ أول من يتوقف 5 ثوانٍ يخسر.'
-  ],
-  5: [
-    '🍀 حظ سعيد! تحصل على نقطة مجانية.',
-    '🎁 اختر لاعباً وامنحه نقطة، وتحصل أنت أيضاً على نقطة.',
-    '👑 أنت الملك لهذه الجولة: اختر شخصاً يؤدي تحدياً بدلاً منك.',
-    '🚀 نقطة مضاعفة! إذا نجحت في تحدٍ تختاره العائلة تحصل على نقطتين.',
-    '😈 سرقة لطيفة: اختر لاعباً لديه نقطة واحدة على الأقل وانقل نقطة واحدة إليك.'
-  ],
-  6: [
-    'اذكر 3 كواكب غير الأرض.',
-    'ما الحيوان الذي يُعرف بأنه أسرع حيوان بري؟',
-    'كم يساوي 7 × 8؟',
-    'اذكر 4 دول تبدأ أسماؤها بحروف مختلفة.',
-    'لديك 10 ثوانٍ: اذكر 5 أشياء يمكن أن تجدها في المطبخ.'
-  ]
-};
+  const categories = {
+    1:{label:'حركة مضحكة',icon:'🤪'},
+    2:{label:'حيوان مرح',icon:'🦁'},
+    3:{label:'تحدي سرعة',icon:'⚡'},
+    4:{label:'تمثيل',icon:'🎭'},
+    5:{label:'بطاقة حظ',icon:'🍀'},
+    6:{label:'سؤال ذكي',icon:'🧠'}
+  };
 
-function renderPlayers(){
-  playersEl.innerHTML = players.map((p,i) =>
-    `<span class="player-chip ${i===turn?'active':''}">${p}: ⭐ ${scores[i]}</span>`
-  ).join('');
-  turnName.textContent = players.length >= 2 ? players[turn] : 'أضيفوا لاعبين للبدء';
-  rollBtn.disabled = players.length < 2;
-}
+  const tasks = {
+    1:[
+      'اقفز مثل الضفدع 5 مرات! 🐸',
+      'امشِ مثل البطريق لمدة 10 ثوانٍ! 🐧',
+      'اصنع أطرف وجه تستطيع فعله! 😜',
+      'تحرك مثل روبوت لمدة 10 ثوانٍ! 🤖',
+      'لف حول نفسك مرة واحدة ثم امشِ كأنك ملك! 👑',
+      'صفّق فوق رأسك 6 مرات ثم قل: أنا بطل! 🦸'
+    ],
+    2:[
+      'قلّد صوت الأسد! 🦁',
+      'مثّل قطة نائمة ثم تستيقظ! 🐱',
+      'امشِ مثل الفيل! 🐘',
+      'قلّد دجاجة لمدة 8 ثوانٍ! 🐔',
+      'اقفز مثل الأرنب 6 مرات! 🐰',
+      'تحرك ببطء شديد مثل السلحفاة! 🐢'
+    ],
+    3:[
+      'اذكر 4 ألوان خلال 5 ثوانٍ! 🎨',
+      'اذكر 3 فواكه بسرعة! 🍎',
+      'المس شيئاً أزرق ثم عد إلى مكانك! 🔵',
+      'اذكر 4 حيوانات خلال 6 ثوانٍ! 🐾',
+      'صفّق 8 مرات بسرعة! 👏',
+      'اذكر 3 أشياء موجودة في المطبخ خلال 5 ثوانٍ! 🍴'
+    ],
+    4:[
+      'مثّل أنك طائرة تطير وعلى الآخرين التخمين! ✈️',
+      'مثّل أنك تفتح هدية ضخمة! 🎁',
+      'مثّل شخصاً نائماً ثم يستيقظ فجأة! 😴',
+      'مثّل أنك تمشي على القمر! 🌙',
+      'مثّل سمكة تسبح! 🐟',
+      'مثّل ديناصوراً صغيراً يبحث عن أمه! 🦖'
+    ],
+    5:[
+      'حظ سعيد! تحصل على نجمة إذا قلت شيئاً لطيفاً عن لاعب آخر. 💛',
+      'اختر لاعباً وصفّقا معاً 5 مرات بشكل متزامن لتحصل على نجمة! 👏',
+      'إذا قفزت 5 قفزات تحصل على النجمة! 🌟',
+      'اجعل أحد اللاعبين يبتسم خلال 10 ثوانٍ لتحصل على النجمة! 😄',
+      'قل: أنا سعيد باللعب معكم! ثم خذ النجمة. 🌈',
+      'الجميع يقول لك كلمة تشجيع، ثم تحصل على النجمة! 🎉'
+    ],
+    6:[
+      'كم يساوي 2 + 3؟',
+      'ما لون الموز عادة؟ 🍌',
+      'كم عدد أرجل القطة؟ 🐱',
+      'ما الحيوان الذي يقول مووو؟ 🐄',
+      'ما اسم الكوكب الذي نعيش عليه؟ 🌍',
+      'كم يوماً يوجد في الأسبوع؟ 📅'
+    ]
+  };
 
-function addPlayer(){
-  const name = nameInput.value.trim();
-  if(!name || players.length >= 6) return;
-  players.push(name);
-  scores.push(0);
-  nameInput.value = '';
-  renderPlayers();
-}
-
-function finishTurn(success, points=1){
-  if(success) scores[turn] += points;
-  if(scores[turn] >= 7){
-    resultEl.innerHTML = `🏆🎉 <strong>${players[turn]}</strong> فاز بمغامرة العائلة!`;
-    renderPlayers();
-    rollBtn.disabled = true;
-    return;
+  function esc(str){
+    return str.replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
   }
-  turn = (turn + 1) % players.length;
-  renderPlayers();
-  resultEl.textContent = `الدور التالي: ${players[turn]} 🎲`;
-  rollBtn.disabled = false;
-}
 
-addBtn.addEventListener('click', addPlayer);
-nameInput.addEventListener('keydown', e => { if(e.key === 'Enter') addPlayer(); });
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
 
-rollBtn.addEventListener('click', () => {
-  const n = Math.floor(Math.random()*6)+1;
-  dieEl.textContent = faces[n];
-  const arr = tasks[n];
-  const task = arr[Math.floor(Math.random()*arr.length)];
+  function celebrate(){
+    const bits = ['⭐','🎉','🌈','✨','🏆','💛','🎈'];
+    confetti.innerHTML = '';
+    for(let i=0;i<34;i++){
+      const s = document.createElement('span');
+      s.textContent = bits[Math.floor(Math.random()*bits.length)];
+      s.style.left = Math.random()*100 + '%';
+      s.style.animationDelay = (Math.random()*.45) + 's';
+      s.style.animationDuration = (1.45 + Math.random()*.9) + 's';
+      confetti.appendChild(s);
+    }
+    setTimeout(() => confetti.innerHTML = '', 2600);
+  }
 
-  resultEl.innerHTML = `
-    <div>
-      <div style="color:#6f6f6f;font-size:14px;margin-bottom:6px">${players[turn]} رمى ${n}</div>
-      <div>${task}</div>
-      <div class="action-row">
-        <button id="successBtn" class="primary">✅ نجحت</button>
-        <button id="failBtn" class="secondary">❌ لم أنجح</button>
-      </div>
-    </div>`;
-  rollBtn.disabled = true;
+  function render(){
+    playersEl.innerHTML = players.map((p,i) =>
+      `<span class="player ${i===turn && !gameOver ? 'active':''}">${esc(p)} ⭐ ${scores[i]}</span>`
+    ).join('');
 
-  document.getElementById('successBtn').addEventListener('click', () => finishTurn(true));
-  document.getElementById('failBtn').addEventListener('click', () => finishTurn(false));
-});
+    if(players.length){
+      scoreBoard.innerHTML = players.map((p,i)=>{
+        const pct = Math.min(100, (scores[i]/6)*100);
+        return `
+          <div class="progress-row">
+            <div class="pname">${esc(p)}</div>
+            <div class="track"><div class="bar" style="width:${pct}%"></div></div>
+            <div class="score-badge">⭐ ${scores[i]}</div>
+          </div>`;
+      }).join('');
+    } else {
+      scoreBoard.innerHTML = '<div class="tip">ستظهر نقاط اللاعبين هنا بعد إضافتهم.</div>';
+    }
 
-resetBtn.addEventListener('click', () => {
-  players.length = 0;
-  scores.length = 0;
-  turn = 0;
-  dieEl.textContent = '🎲';
-  resultEl.textContent = 'كل رقم سيعطيكم مفاجأة مختلفة 😄';
-  renderPlayers();
-});
+    turnName.textContent =
+      gameOver ? '🏆 انتهت اللعبة' :
+      players.length >= 2 ? players[turn] :
+      'أضيفوا اللاعبين أولاً';
 
-renderPlayers();
+    rollBtn.disabled = players.length < 2 || gameOver;
+    addBtn.disabled = players.length >= 6 || gameOver;
+    nameInput.disabled = players.length >= 6 || gameOver;
+  }
+
+  function addPlayer(){
+    const name = nameInput.value.trim();
+    if(!name){
+      showToast('اكتب اسم اللاعب أولاً 😊');
+      return;
+    }
+    if(players.length >= 6){
+      showToast('الحد الأقصى 6 لاعبين');
+      return;
+    }
+    players.push(name);
+    scores.push(0);
+    nameInput.value = '';
+    render();
+    showToast(`تمت إضافة ${name} 🎉`);
+    nameInput.focus();
+  }
+
+  function nextTurn(success){
+    if(gameOver) return;
+
+    if(success){
+      scores[turn]++;
+      if(scores[turn] >= 6){
+        gameOver = true;
+        task.innerHTML = `
+          <div class="task-inner">
+            <span class="task-icon">🏆</span>
+            <div class="task-type">لدينا فائز!</div>
+            <div class="task-text">${esc(players[turn])} فاز بمغامرة الأطفال! 🎉</div>
+            <div class="tip">وصل إلى 6 نجوم أولاً ⭐⭐⭐⭐⭐⭐</div>
+          </div>`;
+        celebrate();
+        render();
+        return;
+      }
+      showToast(`نجمة لـ ${players[turn]} ⭐`);
+    } else {
+      showToast('لا بأس! الدور التالي 😄');
+    }
+
+    turn = (turn + 1) % players.length;
+    render();
+    task.innerHTML = `
+      <div class="task-inner">
+        <span class="task-icon">🎲</span>
+        <div class="task-text">الدور الآن لـ ${esc(players[turn])}</div>
+        <div class="tip">ارمِ النرد لمعرفة المهمة التالية.</div>
+      </div>`;
+  }
+
+  function showChallenge(number){
+    const list = tasks[number];
+    const picked = list[Math.floor(Math.random()*list.length)];
+    const meta = categories[number];
+
+    task.innerHTML = `
+      <div class="task-inner">
+        <span class="task-icon">${meta.icon}</span>
+        <div class="task-type">${meta.label}</div>
+        <div class="task-text">${picked}</div>
+        <div class="actions" style="margin-top:14px">
+          <button id="successBtn" class="btn good" type="button">✅ نجحت!</button>
+          <button id="failBtn" class="btn bad" type="button">🙂 لم أنجح</button>
+        </div>
+      </div>`;
+
+    $('successBtn').addEventListener('click', () => nextTurn(true), {once:true});
+    $('failBtn').addEventListener('click', () => nextTurn(false), {once:true});
+  }
+
+  function rollDice(){
+    if(players.length < 2 || gameOver) return;
+
+    rollBtn.disabled = true;
+    const number = Math.floor(Math.random()*6)+1;
+
+    die.classList.remove('rolling');
+    void die.offsetWidth;
+    die.classList.add('rolling');
+
+    let ticks = 0;
+    const timer = setInterval(()=>{
+      die.textContent = faces[Math.floor(Math.random()*6)+1];
+      ticks++;
+      if(ticks >= 6){
+        clearInterval(timer);
+        die.textContent = faces[number];
+        setTimeout(()=>{
+          showChallenge(number);
+          rollBtn.disabled = true;
+        },120);
+      }
+    },70);
+  }
+
+  function resetGame(){
+    players.length = 0;
+    scores.length = 0;
+    turn = 0;
+    gameOver = false;
+    die.textContent = '🎲';
+    task.innerHTML = `
+      <div class="task-inner">
+        <span class="task-icon">🌈</span>
+        <div class="task-text">جاهزون للمرح؟</div>
+        <div class="tip">أضيفوا اللاعبين ثم ارموا النرد.</div>
+      </div>`;
+    render();
+    nameInput.disabled = false;
+    nameInput.focus();
+  }
+
+  addBtn.addEventListener('click', addPlayer);
+  nameInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') addPlayer();
+  });
+  rollBtn.addEventListener('click', rollDice);
+  resetBtn.addEventListener('click', resetGame);
+
+  render();
+})();
 </script>
 </body>
 </html>
